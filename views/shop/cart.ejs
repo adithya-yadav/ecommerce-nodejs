@@ -1,0 +1,63 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+    </head>
+
+    <body>
+        <%- include('../includes/navigation.ejs') %>
+            <main>
+                <% if (prods.length> 0) { %>
+                    <div class="grid">
+                        <% for (let product of prods) { %>
+                            <form class="card__actions" method="post">
+                                <input type="hidden" name="id" value="<%= product.id %>">
+                                <article class="card product-item">
+                                    <header class="card__header">
+                                        <h1 class="product__title">
+                                            <%= product.title %>
+                                        </h1>
+                                    </header>
+                                    <div class="card__image">
+                                        <img src="<%= product.url %>" alt="<%= product.title %>">
+                                    </div>
+                                    <div class="card__content">
+                                        <h2 class="product__price">₹ <%= product.price %>
+                                        </h2>
+                                        <p class="product__description">
+                                            <%= product.description %>
+                                        </p>
+                                    </div>
+                                    <div class="card__actions remove_btn">
+                                        <button type="submit" class="btn">Remove From Cart</button>
+                                    </div>
+                                </article>
+                            </form>
+                            <% } %>
+                    </div>
+                    <div class="checkout_btn" id="checkout_id" onclick="checkoutHandler()"><button>Checkout</button>
+                    </div>
+                    <% } else { %>
+                        <h1>No Items Added !</h1>
+                        <% } %>
+                            <script>
+                                async function checkoutHandler() {
+                                    try {
+                                        const response = await fetch('/checkout', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                            },
+                                        });
+
+                                        if (response.ok) {
+                                            alert('Cart cleared successfully');
+                                        } else {
+                                            alert('Error clearing cart');
+                                        }
+                                    } catch (error) {
+                                        console.error(error);
+                                        alert('An error occurred');
+                                    }
+                                }
+                            </script>
+            </main>
+            <%- include('../includes/end.ejs') %>
